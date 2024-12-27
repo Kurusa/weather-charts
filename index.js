@@ -1,10 +1,13 @@
 const express = require('express');
-const { StatusCodes } = require('http-status-codes');
-const { chartRequestSchema } = require('./validation');
+const {StatusCodes} = require('http-status-codes');
+const {chartRequestSchema} = require('./validation');
 const app = express();
 const port = 3000;
 const QuickChart = require('quickchart-js');
 const {DAILY_LIGHT, HOURLY_TEMPERATURE, HOURLY_WIND} = require("./chartTypes");
+const {generateDailyLightConfig} = require('./chartGenerators/dailyLightChart');
+const {generateHourlyTemperatureConfig} = require('./chartGenerators/hourlyTemperatureChart');
+const {generateHourlyWindConfig} = require('./chartGenerators/hourlyWindChart');
 
 app.use(express.json());
 
@@ -13,13 +16,13 @@ app.get('/', (req, res) => {
 });
 
 app.post('/generate-chart', async (req, res) => {
-    const { error, value } = chartRequestSchema.validate(req.body);
+    const {error, value} = chartRequestSchema.validate(req.body);
 
     if (error) {
-        return res.status(StatusCodes.BAD_REQUEST).json({ error: error.details[0].message });
+        return res.status(StatusCodes.BAD_REQUEST).json({error: error.details[0].message});
     }
 
-    const { type, weatherData } = value;
+    const {type, weatherData} = value;
 
     try {
         let config;
@@ -39,10 +42,9 @@ app.post('/generate-chart', async (req, res) => {
         chart.setConfig(config);
         const chartUrl = chart.getUrl();
 
-        res.json({ url: chartUrl });
+        res.json({url: chartUrl});
     } catch (error) {
-        console.error('Помилка при генерації графіка:', error);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Не вдалося згенерувати графік' });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error: 'Не вдалося згенерувати графік' + error.message});
     }
 });
 

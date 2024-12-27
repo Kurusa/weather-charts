@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "pm2 start index.js --name 'chart-service'",
+    "stop": "pm2 stop chart-service",
+    "restart": "pm2 restart chart-service",
+    "delete": "pm2 delete chart-service",
+    "logs": "pm2 logs chart-service",
+    "status": "pm2 status"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.7.9",
     "express": "^4.21.2",
     "http-status-codes": "^2.3.0",
     "joi": "^17.13.3",
