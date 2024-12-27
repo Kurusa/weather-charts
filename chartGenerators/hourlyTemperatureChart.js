@@ -2,10 +2,7 @@ function generateHourlyTemperatureConfig(weatherData) {
     const hourlyData = weatherData.hourly.slice(0, 20);
 
     const labels = hourlyData.map(hour =>
-        new Date(hour.dt * 1000).toLocaleTimeString('uk-UA', {
-            hour: '2-digit',
-            minute: '2-digit',
-        })
+        new Date(hour.dt).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', hour12: false})
     );
 
     return {
@@ -36,44 +33,19 @@ function generateHourlyTemperatureConfig(weatherData) {
             ],
         },
         options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 14,
-                            weight: 'bold',
-                        },
-                        color: '#333',
-                    },
-                },
-            },
             scales: {
-                xScales: [{
-                    title: {
-                        display: true,
-                        text: 'Час доби',
-                        color: '#444',
-                        font: {
-                            size: 14,
-                            weight: 'bold',
-                        },
-                    },
-                }],
                 yScales: [{
-                    title: {
-                        display: true,
-                        text: 'Температура (°C)',
-                        color: '#444',
-                        font: {
-                            size: 14,
-                            weight: 'bold',
-                        },
-                    },
                     ticks: {
                         stepSize: 1,
                         color: '#444',
                     },
+                }],
+                yAxes: [{
+                    ticks: {
+                        callback: (val) => {
+                            return val + '°C';
+                        },
+                    }
                 }],
             },
         },

@@ -1,11 +1,8 @@
 function generateHourlyWindConfig(weatherData) {
-    const windData = weatherData.hourly.slice(0, 20);
+    const hourlyData = weatherData.hourly.slice(0, 20);
 
-    const labels = windData.map(hour =>
-        new Date(hour.dt * 1000).toLocaleTimeString('uk-UA', {
-            hour: '2-digit',
-            minute: '2-digit',
-        })
+    const labels = hourlyData.map(hour =>
+        new Date(hour.dt).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', hour12: false})
     );
 
     return {
@@ -15,7 +12,7 @@ function generateHourlyWindConfig(weatherData) {
             datasets: [
                 {
                     label: 'Швидкість вітру (м/c)',
-                    data: windData.map(hour => hour.wind_speed),
+                    data: hourlyData.map(hour => hour.wind_speed),
                     backgroundColor: 'rgba(255, 107, 107, 0.1)',
                     borderColor: '#FF6B6B',
                     fill: true,
@@ -25,7 +22,7 @@ function generateHourlyWindConfig(weatherData) {
                 },
                 {
                     label: 'Пориви вітру (м/c)',
-                    data: windData.map(hour => hour.wind_gust || 0),
+                    data: hourlyData.map(hour => hour.wind_gust || 0),
                     backgroundColor: 'rgba(77, 150, 255, 0.1)',
                     borderColor: '#4D96FF',
                     fill: true,
@@ -37,17 +34,6 @@ function generateHourlyWindConfig(weatherData) {
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 14,
-                            weight: 'bold',
-                        },
-                        color: '#333',
-                    },
-                },
-            },
             scales: {
                 xAxes: [{
                     title: {

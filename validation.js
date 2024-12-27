@@ -11,18 +11,18 @@ const chartRequestSchema = Joi.object({
         timezone: Joi.string().required(),
         timezone_offset: Joi.number().required(),
         current: Joi.object({
-            dt: Joi.number().required(),
+            dt: Joi.string().isoDate().required(),
             temp: Joi.number().required(),
             feels_like: Joi.number().required(),
             wind_speed: Joi.number().required(),
-            wind_gust: Joi.number().required(),
+            wind_gust: Joi.optional(),
         }).required().unknown(true),
         daily: Joi.array()
             .items(
                 Joi.object({
-                    dt: Joi.number().required(),
-                    sunrise: Joi.number().required(),
-                    sunset: Joi.number().required(),
+                    dt: Joi.string().isoDate().required(),
+                    sunrise: Joi.string().isoDate().required(),
+                    sunset: Joi.string().isoDate().required(),
                     temp: Joi.object({
                         day: Joi.number().required(),
                     }).required().unknown(true),
@@ -32,7 +32,7 @@ const chartRequestSchema = Joi.object({
             .required(),
         hourly: Joi.array()
             .items(Joi.object({
-                dt: Joi.number().required(),
+                dt: Joi.string().isoDate().required(),
                 temp: Joi.number().required(),
                 feels_like: Joi.number().required(),
                 wind_speed: Joi.number().required(),
